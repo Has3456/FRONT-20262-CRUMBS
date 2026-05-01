@@ -15,26 +15,52 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
-    // Lógica de autenticación con LocalStorage
-    const usuarios = JSON.parse(localStorage.getItem('crumbs_users')) || [];
-    const usuarioValido = usuarios.find(u => u.email === email && u.password === password);
+    setLoading(true);
+
+    // 1. CREDENCIALES DEL ADMINISTRADOR (Dato Quemado)
+    const ADMIN_DATA = {
+      nombre: 'Administrador Maestro',
+      email: 'admin@crumbs.com',
+      password: 'admin123',
+      rol: 'admin'
+    };
+
+    // 2. LÓGICA DE AUTENTICACIÓN
+    let usuarioValido = null;
+
+    // Verificar primero si es el Admin
+    if (email === ADMIN_DATA.email && password === ADMIN_DATA.password) {
+      usuarioValido = ADMIN_DATA;
+    } else {
+      // Si no es admin, buscar en usuarios registrados (LocalStorage)
+      const usuarios = JSON.parse(localStorage.getItem('crumbs_users')) || [];
+      const encontrado = usuarios.find(u => u.email === email && u.password === password);
+      if (encontrado) {
+        usuarioValido = { ...encontrado, rol: 'usuario' }; // Asignar rol de usuario
+      }
+    }
 
     if (usuarioValido) {
-      setLoading(true);
-      
-      // Registro de sesión
+      // Registro de sesión con el nuevo campo de ROL
       localStorage.setItem('user_session', JSON.stringify({
         nombre: usuarioValido.nombre,
         email: usuarioValido.email,
+        rol: usuarioValido.rol, // Guardamos el rol para el Dashboard
         loginTime: new Date()
       }));
 
-      // Redirección al Dashboard tras éxito
+      // Redirección al Dashboard tras éxito con tu delay original
       setTimeout(() => {
+        setLoading(false);
+        if (usuarioValido.rol === 'admin') {
+          alert("Acceso total concedido. Bienvenido, Admin.");
+        } else {
+          alert(`Identidad confirmada. Bienvenido, ${usuarioValido.nombre}.`);
+        }
         navigate('/dashboard'); 
       }, 1000);
     } else {
+      setLoading(false);
       alert("Acceso denegado. Las credenciales no coinciden con nuestros registros.");
     }
   };
