@@ -1,0 +1,442 @@
+/* src/styles/login-light.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Clicker+Script&display=swap');
+
+:root {
+    /* Paleta Light Reconfigurada */
+    --bg-deep: #f3f4f6;           /* Gris muy suave de fondo */
+    --accent-gold: #b8860b;       /* Dorado con más contraste (Dark Goldenrod) */
+    --panel-bg: #ffffff;          /* Blanco puro para el panel */
+    --input-border: #d1d5db;      /* Bordes sutiles para inputs */
+    --text-white: #111827;        /* Texto principal (Casi negro) */
+    --text-dim: #6b7280;          /* Texto secundario/slogan */
+    --gold-gradient: linear-gradient(90deg, #b8860b, #d4af37, #f1c40f);
+    --focus-ring: rgba(184, 134, 11, 0.15);
+}
+
+/* --- Base --- */
+.login-page-wrapper {
+    background-color: var(--bg-deep);
+    color: var(--text-white);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* --- Fondo con Efectos Suaves --- */
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    filter: blur(120px);
+    opacity: 0.2; /* Menos opacidad para no ensuciar el blanco */
+    pointer-events: none;
+}
+
+.glow-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--accent-gold);
+}
+
+.glow-1 {
+    width: 45vw;
+    height: 45vw;
+    top: -15%;
+    left: -10%;
+}
+
+.glow-2 {
+    width: 35vw;
+    height: 35vw;
+    bottom: 0;
+    right: 0;
+    background: #e5e7eb; /* Color neutro claro para el segundo brillo */
+}
+
+/* --- Layout Principal --- */
+.main-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; 
+    padding-top: 8vh; 
+    min-height: 100vh;
+    gap: 3rem;
+}
+
+/* --- Título y Brand --- */
+.brand-hero { 
+    text-align: center; 
+}
+
+.main-logo { 
+    font-size: 5rem; 
+    font-weight: 800; 
+    letter-spacing: -4px; 
+    margin: 0; 
+    line-height: 1;
+    color: #000000;
+}
+
+.slogan-container { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    margin-top: 10px; 
+    justify-content: center; 
+}
+
+.main-slogan { 
+    text-transform: uppercase; 
+    letter-spacing: 5px; 
+    font-size: 0.7rem; 
+    color: var(--accent-gold); 
+    font-weight: 600; 
+    margin: 0; 
+}
+
+.decorator-line { 
+    width: 40px; 
+    height: 1px; 
+    background: var(--accent-gold); 
+    opacity: 0.4; 
+}
+
+.content-layout { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    gap: 80px; 
+    width: 100%; 
+}
+
+/* --- Panel de Login (Light Elevation) --- */
+.auth-panel {
+    flex: 1;
+    max-width: 590px;
+    background: var(--panel-bg);
+    padding: 3rem 2.8rem; 
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 8px; /* Bordes más suaves para el modo claro */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.06); 
+    position: relative;
+}
+
+.panel-accent-top { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 60px; 
+    height: 4px; 
+    background: var(--gold-gradient); 
+}
+
+.panel-header { 
+    text-align: center; 
+    margin-bottom: 2.5rem; 
+}
+
+.crumb-light { 
+    width: 12px; 
+    height: 12px; 
+    background: var(--accent-gold); 
+    border-radius: 50%; 
+    box-shadow: 0 0 15px rgba(184, 134, 11, 0.4); 
+    margin: 0 auto 15px; 
+}
+
+.panel-header h2 { 
+    font-size: 1.1rem; 
+    letter-spacing: 4px; 
+    margin: 0; 
+    font-weight: 800; 
+}
+
+.panel-header p { 
+    font-size: 0.8rem; 
+    color: var(--text-dim); 
+    margin-top: 5px; 
+}
+
+/* --- Inputs y Formulario --- */
+.input-group { 
+    margin-bottom: 1.8rem; 
+}
+
+.input-group label { 
+    font-size: 0.65rem; 
+    letter-spacing: 2px; 
+    color: #4b5563; 
+    display: block; 
+    margin-bottom: 10px; 
+    font-weight: 700; 
+}
+
+.dot { 
+    width: 4px; 
+    height: 4px; 
+    background: var(--accent-gold); 
+    display: inline-block; 
+    vertical-align: middle; 
+    margin-right: 8px; 
+    border-radius: 50%; 
+}
+
+.input-group input {
+    width: 100%; 
+    background: #f9fafb; 
+    border: 1px solid var(--input-border);
+    padding: 15px; 
+    color: #111827; 
+    font-size: 0.95rem; 
+    box-sizing: border-box; 
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus { 
+    border-color: var(--accent-gold); 
+    outline: none; 
+    background: #ffffff; 
+    box-shadow: 0 0 0 4px var(--focus-ring); 
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 0.85rem;
+}
+
+.remember-me { 
+    display: flex; 
+    align-items: center; 
+    cursor: pointer; 
+    color: var(--text-dim); 
+}
+
+.remember-me input { 
+    display: none; 
+}
+
+.checkmark {
+    width: 16px; 
+    height: 16px; 
+    border: 1px solid var(--input-border);
+    margin-right: 8px; 
+    display: inline-block; 
+    position: relative; 
+    border-radius: 4px;
+    background: #fff;
+}
+
+.remember-me input:checked + .checkmark {
+    background: var(--accent-gold); 
+    border-color: var(--accent-gold); 
+}
+
+.remember-me input:checked + .checkmark::after {
+    content: "✓";
+    color: white;
+    font-size: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.forgot-link { 
+    color: var(--accent-gold); 
+    text-decoration: none; 
+    font-weight: 600; 
+}
+
+/* --- Botón Principal --- */
+.action-btn {
+    width: 100%; 
+    padding: 18px; 
+    background: var(--gold-gradient);
+    border: none; 
+    font-weight: 800; 
+    letter-spacing: 3px; 
+    cursor: pointer; 
+    border-radius: 6px;
+    position: relative; 
+    overflow: hidden; 
+    margin-top: 5px;
+    color: #ffffff; /* Texto blanco para el botón en light mode */
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(184, 134, 11, 0.2);
+}
+
+.shimmer-effect { 
+    position: absolute; 
+    top: 0; 
+    left: -100%; 
+    width: 100%; 
+    height: 100%; 
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); 
+    animation: shimmer 3s infinite linear; 
+}
+
+@keyframes shimmer { 
+    100% { left: 100%; } 
+}
+
+/* --- Enjambre Flotante (Light) --- */
+.swarm-collage { 
+    flex: 0.8; 
+    height: 450px; 
+    position: relative; 
+}
+
+.crumb-item { 
+    position: absolute; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    opacity: 0.7; 
+}
+
+.icon-svg { 
+    width: 42px; 
+    height: 42px; 
+    stroke: var(--accent-gold); 
+    margin-bottom: 10px; 
+}
+
+.crumb-item span { 
+    font-size: 0.6rem; 
+    letter-spacing: 3px; 
+    color: #9ca3af; 
+    font-weight: 700; 
+}
+
+
+/* Estilos para el pie del formulario */
+.auth-footer {
+    margin-top: 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+    padding-top: 1.5rem;
+}
+
+.auth-footer p {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.register-link {
+    background: none;
+    border: none;
+    color: var(--accent-gold);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.register-link:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px var(--accent-gold);
+}
+
+/* Botón de volver flotante */
+.back-to-dash {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    padding: 10px;
+}
+
+.back-to-dash svg {
+    stroke: var(--accent-gold);
+    transition: transform 0.3s ease;
+}
+
+.back-to-dash span {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    font-weight: 700;
+    opacity: 0.6;
+}
+
+/* Efecto hover: la flecha se mueve a la izquierda y el texto brilla */
+.back-to-dash:hover {
+    color: #fff;
+}
+
+.back-to-dash:hover svg {
+    transform: translateX(-5px);
+    filter: drop-shadow(0 0 8px var(--accent-gold));
+}
+
+.back-to-dash:hover span {
+    opacity: 1;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 600px) {
+    .back-to-dash {
+        top: 20px;
+        left: 20px;
+    }
+    .back-to-dash span {
+        display: none; /* En móviles solo dejamos la flecha para no estorbar */
+    }
+}
+
+/* Animaciones de órbita (Iguales al original) */
+.item-1 { top: 0; left: 10%; animation: orbit 8s infinite ease-in-out; }
+.item-2 { bottom: 5%; left: 0; animation: orbit 10s infinite ease-in-out reverse; }
+.item-3 { top: 15%; right: 0; animation: orbit 9s infinite ease-in-out 1.5s; }
+.item-4 { bottom: 10%; right: 15%; animation: orbit 11s infinite ease-in-out 0.5s; }
+.item-5 { top: 45%; left: 50%; animation: orbit 12s infinite ease-in-out 2s; }
+
+@keyframes orbit {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(15px, -20px) rotate(3deg); }
+}
+
+/* Responsividad */
+@media (max-width: 900px) {
+    .content-layout {
+        flex-direction: column;
+        gap: 40px;
+    }
+    .swarm-collage {
+        display: none;
+    }
+    .main-logo {
+        font-size: 3.5rem;
+    }
+}
