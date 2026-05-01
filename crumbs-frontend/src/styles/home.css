@@ -340,6 +340,22 @@ h2 { font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.1; margin-bottom: 30px;
 .t-year { font-weight: 900; font-size: 2rem; color: #1e293b; display: block; margin-bottom: 15px; }
 .t-item p { font-size: 0.9rem; color: var(--text-dim); }
 
+
+/* Esto fuerza a que el contenedor principal deje ver todo el contenido */
+.home-wrapper {
+    display: block !important;
+    overflow-y: visible !important;
+    height: auto !important;
+}
+
+
+
+/* Si AOS está fallando, esto hará que todo aparezca de golpe */
+[data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+}
 /* ========================================
    FOOTER PROFESIONAL
    ======================================== */
