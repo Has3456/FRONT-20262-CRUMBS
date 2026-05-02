@@ -1,0 +1,174 @@
+/* --- VARIABLES Y RESET LIGHT --- */
+:root {
+    --bg-deep: #f4f7f9;           /* Fondo general suave */
+    --bg-card: #ffffff;           /* Tarjetas blancas puras */
+    --gold: #b8860b;              /* Dorado más oscuro para contraste en blanco */
+    --gold-glow: rgba(184, 134, 11, 0.15);
+    --border: #e2e8f0;            /* Bordes sutiles y claros */
+    --text-muted: #64748b;        /* Gris azulado para texto secundario */
+    --text-main: #1e293b;         /* Texto principal oscuro */
+    --red: #d70015;               /* Rojo sistema ajustado */
+    --blue: #007aff;              /* Azul sistema ajustado */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { 
+    background: var(--bg-deep); 
+    color: var(--text-main); 
+    font-family: 'Inter', sans-serif; 
+    overflow: hidden; 
+}
+
+.app-container { display: flex; height: 100vh; }
+
+/* --- SIDEBAR LIGHT --- */
+.sidebar {
+    width: 280px;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.02);
+}
+
+.brand { 
+    display: flex; align-items: center; gap: 10px; 
+    font-weight: 900; letter-spacing: 2px; margin-bottom: 40px; 
+    color: #000;
+}
+
+.logo-dot { 
+    width: 10px; height: 10px; 
+    background: var(--gold); 
+    border-radius: 50%; 
+    box-shadow: 0 0 8px rgba(184, 134, 11, 0.4); 
+}
+
+.user-card {
+    display: flex; align-items: center; gap: 15px;
+    background: #f8fafc;
+    padding: 15px; border-radius: 12px; margin-bottom: 30px;
+    border: 1px solid var(--border);
+}
+
+.avatar {
+    width: 45px; height: 45px; background: var(--gold);
+    color: white; display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; font-weight: 800;
+}
+
+.menu-label { 
+    font-size: 0.65rem; 
+    color: #94a3b8; 
+    letter-spacing: 2px; 
+    margin: 20px 0 10px 10px; 
+    text-transform: uppercase;
+}
+
+.menu-item {
+    width: 100%; padding: 12px 15px; background: none; border: none;
+    color: var(--text-muted); text-align: left; cursor: pointer;
+    border-radius: 8px; transition: 0.3s; font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.menu-item.active, .menu-item:hover {
+    background: #fffbeb; /* Un toque de amarillo crema muy suave */
+    color: var(--gold);
+}
+
+.logout-btn { margin-top: auto; color: #94a3b8; }
+.logout-btn:hover { color: var(--red); }
+
+/* --- VIEWPORT PRINCIPAL --- */
+.main-viewport { flex: 1; padding: 40px 60px; overflow-y: auto; }
+
+.view-header { 
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 40px; 
+}
+
+.gold { color: var(--gold); text-shadow: none; font-weight: 700; }
+
+/* --- SECCIÓN: RESUMEN (Stats Cards) --- */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.stat-card {
+    background: var(--bg-card); 
+    border: 1px solid var(--border);
+    padding: 30px; border-radius: 20px; text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+.stat-card h5 { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 10px; }
+.stat-card h2 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); }
+
+/* --- SECCIÓN: HISTORIAL (Timeline) --- */
+.timeline-container { position: relative; padding-left: 30px; }
+.timeline-container::before {
+    content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 100%;
+    background: linear-gradient(to bottom, var(--gold), #f1f5f9);
+}
+
+.timeline-item {
+    position: relative; margin-bottom: 30px;
+    background: var(--bg-card); 
+    padding: 20px; border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.timeline-item::after {
+    content: ''; position: absolute; left: -34px; top: 25px;
+    width: 10px; height: 10px; background: var(--gold); border-radius: 50%;
+    border: 2px solid var(--bg-deep);
+}
+
+/* --- SECCIÓN: CONSEJOS (Advice Grid) --- */
+.advice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.advice-card {
+    background: var(--bg-card); 
+    border: 1px solid var(--border);
+    padding: 25px; border-radius: 20px; display: flex; gap: 20px;
+    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+}
+.advice-card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+.advice-icon { font-size: 2rem; opacity: 0.9; }
+.advice-card h4 { color: var(--gold); margin-bottom: 8px; }
+.advice-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+/* --- SECCIÓN: TABLA DE GASTOS --- */
+.table-wrapper { 
+    background: var(--bg-card); 
+    border-radius: 20px; 
+    padding: 20px; 
+    border: 1px solid var(--border); 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+}
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 15px; color: #94a3b8; font-size: 0.7rem; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+td { padding: 15px; font-size: 0.9rem; border-bottom: 1px solid var(--border); color: var(--text-main); }
+
+.btn-primary {
+    background: var(--gold); 
+    color: white; 
+    border: none; padding: 10px 20px;
+    border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.75rem;
+    transition: 0.3s;
+}
+.btn-primary:hover { filter: brightness(1.1); box-shadow: 0 4px 12px var(--gold-glow); }
+
+/* --- PRESUPUESTO (Progress Bar) --- */
+.progress-bar-container {
+    width: 100%; height: 12px; background: #e2e8f0;
+    border-radius: 10px; margin: 20px 0; overflow: hidden;
+}
+.progress-fill {
+    width: 0%; height: 100%; background: var(--gold);
+    box-shadow: 0 0 10px var(--gold-glow); transition: width 1s ease-in-out;
+}
+
+/* --- COLORES DE ESTADO --- */
+.red { color: var(--red); font-weight: 600; }
+.blue { color: var(--blue); font-weight: 600; }

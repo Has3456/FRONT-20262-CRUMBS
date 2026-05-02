@@ -1,0 +1,124 @@
+/* ========================================
+   SISTEMA TÁCTICO CRUMBS (DARK MODE)
+   ======================================== */
+:root {
+    --bg-tactical: #05070a;
+    --card-tactical: #0a0c10;
+    --gold-tactical: #d4af37;
+    --border-tactical: rgba(255, 255, 255, 0.05);
+    --red-tactical: #ff453a;
+    --blue-tactical: #0a84ff;
+    --green-tactical: #30d158;
+}
+
+/* Contenedor principal de la página de historial */
+.history-page-body {
+    background-color: var(--bg-tactical);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-y: auto; /* Permite el scroll vertical si hay muchos datos */
+    overflow-x: hidden;
+}
+
+.history-viewport { 
+    padding: 60px 40px; 
+    max-width: 1400px; 
+    margin: 0 auto; 
+    position: relative;
+}
+
+/* --- Header & Status --- */
+.history-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end;
+    margin-bottom: 40px; 
+    border-bottom: 1px solid var(--border-tactical); 
+    padding-bottom: 20px;
+}
+
+.status-box { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    font-size: 0.65rem; 
+    letter-spacing: 2px; 
+    color: #555; 
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.pulse-dot { 
+    width: 8px; height: 8px; 
+    background: var(--gold-tactical); 
+    border-radius: 50%; 
+    box-shadow: 0 0 12px var(--gold-tactical); 
+    animation: pulse-tactical 2s infinite; 
+}
+
+/* --- Estructura de Tabla --- */
+.table-wrapper {
+    background: var(--card-tactical); 
+    border: 1px solid var(--border-tactical);
+    border-radius: 16px; 
+    overflow: hidden; 
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    text-align: left; 
+}
+
+th { 
+    background: rgba(255,255,255,0.03); 
+    padding: 20px;
+    font-size: 0.6rem; 
+    letter-spacing: 2px; 
+    color: #666; 
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+td { 
+    padding: 18px 20px; 
+    border-bottom: 1px solid var(--border-tactical);
+    font-size: 0.9rem; 
+    color: #bbb; 
+    font-family: 'JetBrains Mono', monospace; /* Ideal para cifras numéricas */
+}
+
+tr:hover td {
+    background: rgba(255, 255, 255, 0.01);
+    color: #fff;
+}
+
+/* --- Indicadores de Riesgo y Montos --- */
+.badge-risk {
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.risk-Bajo { color: var(--blue-tactical); background: rgba(10, 132, 255, 0.1); }
+.risk-Medio { color: var(--gold-tactical); background: rgba(212, 175, 55, 0.1); }
+.risk-Alto { color: var(--red-tactical); background: rgba(255, 69, 58, 0.1); }
+
+.monto-gasto { color: var(--red-tactical); font-weight: 700; }
+.saldo-final { color: var(--green-tactical); font-weight: 700; }
+
+/* --- Animaciones --- */
+@keyframes pulse-tactical { 
+    0%, 100% { opacity: 0.4; transform: scale(1); } 
+    50% { opacity: 1; transform: scale(1.2); } 
+}
+
+/* Responsivo para tablas */
+@media (max-width: 900px) {
+    .history-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .table-wrapper { overflow-x: auto; }
+}

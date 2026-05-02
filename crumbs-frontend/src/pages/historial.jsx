@@ -1,63 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Historial.css';
+import '../styles/historial.css';
 
 export const Historial = () => {
   const navigate = useNavigate();
 
-  // 1. Estado para los datos de la tabla (Aquí simulamos datos que vendrían de tu API)
-  const [gastos, setGastos] = useState([
-    {
-      id: 1,
-      fecha: '01/05/2026 14:30',
-      establecimiento: 'Starbucks',
-      categoria: 'Cafetería',
-      presupuestoInicial: 100000,
-      montoGasto: 15000,
-      saldoFinal: 85000,
-      riesgo: 'Bajo'
-    },
-    {
-      id: 2,
-      fecha: '01/05/2026 16:15',
-      establecimiento: 'Restaurante El Faro',
-      categoria: 'Comida',
-      presupuestoInicial: 85000,
-      montoGasto: 45000,
-      saldoFinal: 40000,
-      riesgo: 'Medio'
-    },
-    {
-      id: 3,
-      fecha: '01/05/2026 18:00',
-      establecimiento: 'Casino Central',
-      categoria: 'Entretenimiento',
-      presupuestoInicial: 40000,
-      montoGasto: 35000,
-      saldoFinal: 5000,
-      riesgo: 'Alto'
-    }
-  ]);
-
+  // 1. Estado para los datos de la base de datos real (localStorage)
+  const [gastos, setGastos] = useState([]);
+  
   // 2. Estados para los filtros
   const [busqueda, setBusqueda] = useState('');
   const [filtroRiesgo, setFiltroRiesgo] = useState('ALL');
 
-  // 3. Lógica de filtrado en tiempo real
-  const gastosFiltrados = gastos.filter((gasto) => {
-    const cumpleBusqueda = 
-      gasto.establecimiento.toLowerCase().includes(busqueda.toLowerCase()) ||
-      gasto.categoria.toLowerCase().includes(busqueda.toLowerCase());
+  // 3. Cargar historial al montar el componente (Equivalente a loadHistory)
+  useEffect(() => {
+    cargarDesdeStorage();
+  }, []);
 
-    const cumpleRiesgo = filtroRiesgo === 'ALL' || gasto.riesgo === filtroRiesgo;
+  const cargarDesdeStorage = () => {
+    const db = JSON.parse(localStorage.getItem('crumbs_db')) || [];
+    // Aplicamos reverse() para que los más recientes salgan primero, como en tu JS original
+    setGastos([...db].reverse());
+  };
 
-    return cumpleBusqueda && cumpleRiesgo;
+  // 4. Lógica de filtrado en tiempo real (Equivalente a filterData)
+  const gastosFiltrados = gastos.filter((item) => {
+    const term = busqueda.toLowerCase();
+    const matchesSearch = 
+      item.nombre.toLowerCase().includes(term) || 
+      item.categoria.toLowerCase().includes(term);
+
+    const matchesRisk = filtroRiesgo === 'ALL' || item.riesgo === filtroRiesgo;
+
+    return matchesSearch && matchesRisk;
   });
 
-  // Función para eliminar un registro (Acción)
+  // 5. Función para eliminar (Equivalente a deleteItem)
   const eliminarGasto = (id) => {
-    if (window.confirm('¿Estás seguro de eliminar este registro?')) {
-      setGastos(gastos.filter(gasto => gasto.id !== id));
+    if (window.confirm('¿CONFIRMA LA ELIMINACIÓN DE ESTE REGISTRO?')) {
+      const dbActual = JSON.parse(localStorage.getItem('crumbs_db')) || [];
+      const nuevaDb = dbActual.filter(item => item.id !== id);
+      
+      // Guardar en localStorage
+      localStorage.setItem('crumbs_db', JSON.stringify(nuevaDb));
+      
+      // Actualizar estado local para refrescar la tabla
+      cargarDesdeStorage();
     }
   };
 
@@ -119,33 +107,35 @@ export const Historial = () => {
               </tr>
             </thead>
             <tbody id="table-body">
-              {gastosFiltrados.map((gasto) => (
-                <tr key={gasto.id}>
-                  <td>{gasto.fecha}</td>
-                  <td><strong>{gasto.establecimiento}</strong></td>
-                  <td>{gasto.categoria}</td>
-                  <td>${gasto.presupuestoInicial.toLocaleString()}</td>
-                  <td className="gasto-monto">-${gasto.montoGasto.toLocaleString()}</td>
-                  <td>${gasto.saldoFinal.toLocaleString()}</td>
+              {gastosFiltrados.map((item) => (
+                <tr key={item.id}>
+                  <td style={{ fontSize: '0.7rem', color: '#888' }}>{item.fecha}</td>
+                  <td><strong style={{ color: '#fff' }}>{item.nombre.toUpperCase()}</strong></td>
+                  <td><span style={{ color: '#888' }}>#</span>{item.categoria}</td>
+                  <td>${item.presupuestoOriginal?.toLocaleString() || '0'}</td>
+                  <td className="gasto-monto" style={{ color: '#ff4d4d' }}>-${item.monto.toLocaleString()}</td>
+                  <td className="saldo-final" style={{ color: '#00ff88' }}>${item.saldoDespues?.toLocaleString() || '0'}</td>
                   <td>
-                    <span className={`badge-riesgo ${gasto.riesgo.toLowerCase()}`}>
-                      {gasto.riesgo}
+                    <span className={`badge-risk risk-${item.riesgo.toLowerCase()}`}>
+                      {item.riesgo.toUpperCase()}
                     </span>
                   </td>
                   <td>
                     <button 
                       className="btn-delete" 
-                      onClick={() => eliminarGasto(gasto.id)}
+                      onClick={() => eliminarGasto(item.id)}
                     >
-                      Eliminar
+                      ELIMINAR
                     </button>
                   </td>
                 </tr>
               ))}
+              
+              {/* Mensaje de "No resultados" */}
               {gastosFiltrados.length === 0 && (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', color: '#888' }}>
-                    No se encontraron registros.
+                  <td colSpan="8" style={{ textAlign: 'center', color: '#555', padding: '40px' }}>
+                    --- NO SE ENCONTRARON REGISTROS EN EL LOG ---
                   </td>
                 </tr>
               )}
