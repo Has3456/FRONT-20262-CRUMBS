@@ -19,7 +19,12 @@
     -webkit-font-smoothing: antialiased;
 }
 
-html { scroll-behavior: smooth; }
+html,body { 
+    height: auto !important; /* Cambia 100% o 100vh por auto */
+    min-height: 100%;
+    overflow-y: visible !important; /* Asegura que el scroll vertical esté habilitado */
+    overflow-x: hidden; /* Evita el scroll horizontal */
+}
 
 body {
     background-color: var(--bg-deep);
@@ -344,7 +349,7 @@ h2 { font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.1; margin-bottom: 30px;
 /* Esto fuerza a que el contenedor principal deje ver todo el contenido */
 .home-wrapper {
     display: block !important;
-    overflow-y: visible !important;
+    overflow-clip-margin: visible !important;
     height: auto !important;
 }
 
