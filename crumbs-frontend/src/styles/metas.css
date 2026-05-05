@@ -1,0 +1,229 @@
+/* --- VARIABLES DE SISTEMA (Crumbs OS v2.0) --- */
+:root {
+    --bg-deep: #05070a;
+    --bg-card: #0a0c10;
+    --gold: #d4af37;
+    --border: rgba(255, 255, 255, 0.05);
+    --gold-glow: rgba(212, 175, 55, 0.2);
+    --text-muted: #555;
+    --white: #ffffff;
+    
+    /* Tipografía */
+    --font-tactical: 'Inter', sans-serif;
+    --font-data: 'JetBrains Mono', monospace;
+}
+ 
+/* --- RESET & ESTRUCTURA DE CONSOLA --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+body { 
+    background-color: var(--bg-deep); 
+    color: var(--white); 
+    font-family: var(--font-tactical); 
+    min-height: 100vh;
+}
+ 
+.mission-control-viewport { 
+    padding: 30px; 
+    max-width: 1500px; 
+    margin: 0 auto; 
+    animation: fadeIn 0.6s ease-out;
+}
+ 
+/* --- CABECERA TÁCTICA (DENSA Y ORDENADA) --- */
+.tactical-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px;
+}
+ 
+.status-box { display: flex; align-items: center; gap: 10px; font-size: 0.65rem; letter-spacing: 2px; color: var(--text-muted); }
+.pulse-dot-green { width: 7px; height: 7px; background: #d4af37; border-radius: 50%; animation: pulse-green 2s infinite; box-shadow: 0 0 10px #30d158; }
+.tactical-header h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; }
+.gold { color: var(--gold); }
+ 
+/* Botón Titilante (Dorado Crumbs) - Mismo estilo que Registrar Gasto */
+.btn-tactic-titilante {
+    background: transparent; border: 1px solid var(--gold);
+    color: var(--gold); padding: 10px 20px; border-radius: 6px;
+    font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.3s;
+    text-transform: uppercase;
+    animation: titilar-oro 2.5s infinite ease-in-out;
+}
+.btn-tactic-titilante:hover { background: var(--gold-glow); transform: translateY(-1px); }
+ 
+/* --- LAYOUT DE CUADRÍCULA PROFESIONAL --- */
+.layout-grid { 
+    display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; 
+}
+ 
+/* --- COLUMNA 1: CONFIGURACIÓN DE OBJETIVO (Densa) --- */
+.goal-config-card { 
+    background: var(--bg-card); padding: 30px; border-radius: 20px; 
+    border: 1px solid var(--border); height: fit-content; 
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+}
+ 
+.panel-label { font-size: 0.6rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 25px; font-weight: 900; }
+ 
+.input-group { margin-bottom: 20px; }
+label { font-size: 0.6rem; color: #666; display: block; margin-bottom: 8px; font-weight: 700; }
+ 
+input, select { 
+    width: 100%; background: #000; border: 1px solid var(--border); 
+    padding: 12px; border-radius: 8px; color: var(--white); font-size: 0.9rem; outline: none; 
+}
+input:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 10px var(--gold-glow); }
+ 
+/* Selectores de fecha nativos con diseño oscuro */
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+ 
+/* Filas multi-input */
+.input-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+.input-row-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+ 
+.btn-establish { 
+    width: 100%; background: var(--gold); color: black; border: none; 
+    padding: 15px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; 
+    text-transform: uppercase; font-size: 0.8rem;
+}
+.btn-establish:hover { transform: translateY(-3px); box-shadow: 0 10px 20px var(--gold-glow); }
+ 
+/* --- COLUMNA 2: RESUMEN Y ANÁLISIS --- */
+.analysis-section { 
+    background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); 
+}
+ 
+.goals-list { display: grid; grid-template-columns: 1fr; gap: 15px; }
+.goal-placeholder { 
+    text-align: center; color: #333; font-size: 0.8rem; padding: 50px; font-family: var(--font-data); 
+    border: 1px dashed var(--border); border-radius: 10px;
+}
+ 
+/* --- ANIMACIONES TÁCTICAS --- */
+@keyframes pulse-green { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+ 
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+ 
+/* El efecto titilante dorado de la otra interfaz */
+@keyframes titilar-oro {
+    0%, 100% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.1); }
+    50% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.6); }
+}
+ 
+/* --- VARIABLES DE SISTEMA (Crumbs OS v2.0 - LIGHT MODE) --- */
+ :root {
+ --bg-deep: #f4f7f9;        /* Fondo de pantalla claro */
+ --bg-card: #ffffff;        /* Fondo de tarjeta blanco puro */
+ --gold: #d4af37;
+ --border: rgba(0, 0, 0, 0.08); /* Bordes suaves para modo claro */
+ --gold-glow: rgba(212, 175, 55, 0.15);
+ --text-main: #1a1c20;      /* Texto principal casi negro */
+ --text-muted: #888888;     /* Gris para info secundaria */
+ --white: #ffffff;
+ 
+ /* Tipografía */
+ --font-tactical: 'Inter', sans-serif;
+ --font-data: 'JetBrains Mono', monospace;
+ }
+ 
+/* --- RESET & ESTRUCTURA DE CONSOLA --- */
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+body { 
+ background-color: var(--bg-deep); 
+ color: var(--text-main); 
+ font-family: var(--font-tactical); 
+ min-height: 100vh;
+ }
+ 
+.mission-control-viewport { 
+ padding: 30px; 
+ max-width: 1500px; 
+ margin: 0 auto; 
+ animation: fadeIn 0.6s ease-out;
+ }
+ 
+/* --- CABECERA TÁCTICA --- */
+ .tactical-header {
+ display: flex; justify-content: space-between; align-items: center;
+ margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px;
+ }
+ 
+.status-box { display: flex; align-items: center; gap: 10px; font-size: 0.65rem; letter-spacing: 2px; color: var(--text-muted); }
+ .pulse-dot-green { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; animation: pulse-green 2s infinite; box-shadow: 0 0 10px var(--gold); }
+ .tactical-header h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; color: var(--text-main); }
+ .gold { color: var(--gold); }
+ 
+/* Botón Titilante (Dorado Crumbs) */
+ .btn-tactic-titilante {
+ background: transparent; border: 1px solid var(--gold);
+ color: var(--gold); padding: 10px 20px; border-radius: 6px;
+ font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.3s;
+ text-transform: uppercase;
+ animation: titilar-oro 2.5s infinite ease-in-out;
+ }
+ .btn-tactic-titilante:hover { background: var(--gold-glow); transform: translateY(-1px); }
+ 
+/* --- LAYOUT DE CUADRÍCULA --- */
+ .layout-grid { 
+ display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; 
+ }
+ 
+/* --- COLUMNA 1: CONFIGURACIÓN DE OBJETIVO --- */
+ .goal-config-card { 
+ background: var(--bg-card); padding: 30px; border-radius: 20px; 
+ border: 1px solid var(--border); height: fit-content; 
+ box-shadow: 0 15px 40px rgba(0,0,0,0.05); /* Sombra suave */
+ }
+ 
+.panel-label { font-size: 0.6rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 25px; font-weight: 900; }
+ 
+.input-group { margin-bottom: 20px; }
+ label { font-size: 0.6rem; color: #999; display: block; margin-bottom: 8px; font-weight: 700; }
+ 
+input, select { 
+ width: 100%; background: #f9f9f9; border: 1px solid var(--border); 
+ padding: 12px; border-radius: 8px; color: var(--text-main); font-size: 0.9rem; outline: none; 
+ }
+ input:focus, select:focus { 
+     border-color: var(--gold); 
+     background: var(--white);
+     box-shadow: 0 0 10px var(--gold-glow); 
+ }
+ 
+/* Ajuste para input de fecha en modo claro */
+ input[type="date"]::-webkit-calendar-picker-indicator { filter: none; opacity: 0.6; }
+ 
+/* Filas multi-input */
+ .input-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+ .input-row-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+ 
+.btn-establish { 
+ width: 100%; background: var(--gold); color: white; border: none; 
+ padding: 15px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; 
+ text-transform: uppercase; font-size: 0.8rem;
+ }
+ .btn-establish:hover { transform: translateY(-3px); box-shadow: 0 10px 20px var(--gold-glow); }
+ 
+/* --- COLUMNA 2: RESUMEN Y ANÁLISIS --- */
+ .analysis-section { 
+ background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); 
+ box-shadow: 0 15px 40px rgba(0,0,0,0.03);
+ }
+ 
+.goals-list { display: grid; grid-template-columns: 1fr; gap: 15px; }
+ .goal-placeholder { 
+ text-align: center; color: #bbb; font-size: 0.8rem; padding: 50px; font-family: var(--font-data); 
+ border: 1px dashed var(--border); border-radius: 10px;
+ }
+ 
+/* --- ANIMACIONES TÁCTICAS --- */
+ @keyframes pulse-green { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+ 
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+ 
+ @keyframes titilar-oro {
+ 0%, 100% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.1); }
+ 50% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+ }
+ 
