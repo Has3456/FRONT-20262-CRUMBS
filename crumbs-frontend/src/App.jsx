@@ -8,9 +8,13 @@ import Registro from './pages/registro';
 import { Dashboard } from './pages/Dashboard'; 
 import { Historial } from './pages/Historial'; 
 import { CrearGasto } from './pages/CrearGasto'; // Importación del nuevo componente
+import { Metas } from './pages/metas';
+import { Perfil } from './pages/perfil';
+
 
 // Importación de Estilos Globales
 import './App.css';
+
 
 function App() {
   return (
@@ -31,6 +35,14 @@ function App() {
 
         {/* 4. Vista de Historial Detallado */}
         <Route path="/historial" element={<Historial />} />
+
+        {/* 5. Vista de Metas */}
+        <Route path="/metas" element={<Metas />} />
+
+
+        {/* 7. Vista de Perfil */}
+        <Route path="/perfil" element={<Perfil />} />
+
 
         {/* Opcional: Ruta para manejar errores 404 */}
         <Route path="*" element={
