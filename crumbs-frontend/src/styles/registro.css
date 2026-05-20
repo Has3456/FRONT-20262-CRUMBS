@@ -1,13 +1,13 @@
-/* src/styles/register-light.css */
+/* src/styles/registro.css */
 :root {
-    --bg-deep: #f0f2f5;           /* Fondo gris claro neutral */
-    --accent-gold: #b8860b;       /* Dorado profundo para contraste */
-    --panel-bg: #ffffff;          /* Panel blanco sólido */
-    --input-border: #d1d5db;      /* Bordes de input suaves */
-    --text-white: #111827;        /* Texto principal oscuro */
-    --text-dim: #6b7280;          /* Texto secundario gris */
+    --bg-deep: #f0f2f5;           /* Tu primer fondo claro e impecable */
+    --accent-gold: #b8860b;       
+    --panel-bg: #ffffff;          
+    --input-border: #d1d5db;      
+    --text-white: #111827;        
+    --text-dim: #6b7280;          
     --gold-gradient: linear-gradient(135deg, #b8860b, #d4af37, #f1c40f);
-    --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-smooth: all 0.3s ease;
 }
 
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -26,122 +26,75 @@ body {
     font-family: 'Inter', sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start; 
-    position: relative;
+    align-items: center; 
+    min-height: 100vh;
 }
 
-/* --- MIGAJAS (Capa Light) --- */
-.floating-crumb {
-    position: fixed;
-    background: var(--accent-gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1; 
-    opacity: 0.4;
-    box-shadow: 0 0 10px rgba(184, 134, 11, 0.3);
-}
-
-/* --- Layout Principal --- */
+/* Envoltura extendida al límite horizontal de la pantalla */
 .main-wrapper {
-    width: 95%;
-    max-width: 1200px;
+    width: 98%;
+    max-width: 1600px; /* Ancho máximo ultra-panorámico */
     display: flex;
     flex-direction: column;
     align-items: center; 
-    justify-content: center;
-    padding: 140px 0 80px 0; 
-    gap: 4rem;
-    z-index: 10;
+    padding: 10px 0; 
+    gap: 0.25rem;
 }
 
-.brand-hero {
-    width: 100%;
-    text-align: center;
-}
+.brand-hero { text-align: center; }
+.main-logo-white { font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; margin: 0; color: #0f172a; }
+.slogan-container { display: flex; align-items: center; gap: 12px; justify-content: center; margin-top: 2px; }
+.main-slogan { text-transform: uppercase; letter-spacing: 3px; font-size: 0.65rem; color: var(--accent-gold); font-weight: 700; }
+.decorator-line { width: 25px; height: 1px; background: var(--accent-gold); opacity: 0.4; }
 
-/* Logo CRUMBS en Negro/Oscuro */
-.main-logo-white { 
-    font-size: 4.5rem; 
-    font-weight: 900; 
-    letter-spacing: -2px; 
-    margin: 0;
-    color: #111827;
-    text-transform: uppercase;
-    line-height: 1;
-}
-
-.slogan-container { 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-    justify-content: center; 
-    opacity: 0.9; 
-    margin-top: 10px;
-}
-.main-slogan { text-transform: uppercase; letter-spacing: 4px; font-size: 0.65rem; color: var(--accent-gold); font-weight: 700; }
-.decorator-line { width: 30px; height: 1px; background: var(--accent-gold); opacity: 0.3; }
-
-/* --- Panel de Registro Extra Ancho (Estilo Elevado) --- */
+/* Tarjeta contenedora ultra-plana (Chata y ancha) */
 .auth-panel-wide {
     width: 100%;
-    max-width: 1000px; 
     background: var(--panel-bg);
-    padding: 3.5rem 4rem;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(5px);
-    border-radius: 8px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    padding: 1.5rem 2.5rem; /* Reducción drástica de padding arriba y abajo */
+    border-radius: 12px; 
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
     position: relative;
-    z-index: 20; 
 }
 
-.panel-accent-top { position: absolute; top: 0; left: 0; width: 80px; height: 3px; background: var(--gold-gradient); }
+.panel-accent-top { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--gold-gradient); border-radius: 12px 12px 0 0; }
 
-.panel-header { text-align: center; margin-bottom: 2.5rem; }
-.crumb-light { 
-    width: 10px; height: 10px; background: var(--accent-gold); 
-    border-radius: 50%; box-shadow: 0 0 10px rgba(184, 134, 11, 0.4); margin: 0 auto 15px; 
-}
-.panel-header h2 { font-size: 1.2rem; letter-spacing: 4px; margin: 0; text-transform: uppercase; color: #111827; }
-.panel-header p { font-size: 0.75rem; color: var(--text-dim); margin-top: 5px; }
+.panel-header { text-align: center; margin-bottom: 1.25rem; }
+.panel-header h2 { font-size: 1.2rem; letter-spacing: 2px; margin: 0; font-weight: 800; color: #0f172a; }
+.panel-header p { font-size: 0.8rem; color: var(--text-dim); margin-top: 2px; }
 
-/* --- Grid de 3 Columnas --- */
-.form-grid-extra-wide {
+/* GRILLA MAESTRA PANORÁMICA DE 4 COLUMNAS CONTINUAS */
+.grid-ultra-horizontal {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 1.5rem 2rem;
-    margin-bottom: 1.5rem;
+    grid-template-columns: repeat(4, 1fr); /* 4 campos exactos lado a lado */
+    gap: 1rem 1.5rem; /* Ajuste súper compacto para que no use espacio vertical */
+    width: 100%;
 }
 
-.input-group { margin-bottom: 0.5rem; }
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
 .input-group label { 
-    font-size: 0.65rem; letter-spacing: 2px; color: #4b5563; 
-    display: flex; align-items: center; margin-bottom: 10px; font-weight: 700; 
+    font-size: 0.62rem; letter-spacing: 0.5px; color: #475569; 
+    display: flex; align-items: center; margin-bottom: 4px; font-weight: 700; 
     text-transform: uppercase;
 }
-.dot { width: 4px; height: 4px; background: var(--accent-gold); margin-right: 8px; border-radius: 50%; }
+.dot { width: 4px; height: 4px; background: var(--accent-gold); margin-right: 5px; border-radius: 50%; }
 
-/* --- Inputs y Selects: Estética Light --- */
+/* Reducción del tamaño de los inputs para aplanar el diseño */
 .input-group input, 
 .dark-select {
     width: 100%; 
-    background: #ffffff; 
+    background: #f8fafc; 
     border: 1px solid var(--input-border);
-    padding: 14px; 
+    padding: 8px 12px; /* Más angosto y fino */
     color: #111827; 
     border-radius: 6px; 
     transition: var(--transition-smooth);
     font-family: inherit;
-    font-size: 0.9rem;
-}
-
-.dark-select {
-    appearance: none;
-    /* Icono de flecha en dorado */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23b8860b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: calc(100% - 15px) center;
-    cursor: pointer;
+    font-size: 0.82rem;
 }
 
 .input-group input:focus, 
@@ -149,70 +102,67 @@ body {
     border-color: var(--accent-gold); 
     outline: none; 
     background: #ffffff;
-    box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.1);
+    box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.05);
 }
 
-.input-group input::placeholder {
-    color: #9ca3af;
+.dark-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23b8860b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 12px) center;
+    cursor: pointer;
 }
 
-.full-width {
-    grid-column: span 3;
-    margin-top: 10px;
+/* Fila inferior compartida (Select de motivo + Botón en un solo renglón) */
+.form-footer-horizontal {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e2e8f0;
+    display: flex;
+    flex-direction: row; 
+    align-items: flex-end;
+    gap: 1.5rem;
+    width: 100%;
 }
 
-/* --- Botón Dorado (Texto Blanco para Legibilidad) --- */
-.action-btn {
-    width: 100%; 
-    padding: 20px; 
+.reasoning-field {
+    flex: 3; 
+}
+
+.action-btn-horizontal {
+    flex: 1; 
+    padding: 9px; 
     background: var(--gold-gradient); 
     border: none;
-    font-weight: 900; 
-    letter-spacing: 4px; 
+    font-weight: 700; 
+    letter-spacing: 2px; 
     color: #ffffff; 
     cursor: pointer;
     border-radius: 6px; 
-    position: relative; 
-    overflow: hidden; 
     transition: var(--transition-smooth);
-    margin-top: 1rem;
     text-transform: uppercase;
-    box-shadow: 0 4px 15px rgba(184, 134, 11, 0.2);
+    font-size: 0.82rem;
+    box-shadow: 0 4px 12px rgba(184, 134, 11, 0.15);
+    height: 37px; /* Perfectamente alineado en altura con los inputs */
 }
 
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(184, 134, 11, 0.3);
+.action-btn-horizontal:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(184, 134, 11, 0.2);
 }
 
-/* --- Enlace "Inicia sesión" Dorado --- */
 .panel-footer { 
     text-align: center; 
-    margin-top: 2rem; 
-    padding-top: 1.5rem; 
-    border-top: 1px solid rgba(0,0,0,0.05);
+    margin-top: 1rem; 
+    padding-top: 0.75rem; 
+    border-top: 1px solid #f1f5f9;
 }
-.panel-footer p { font-size: 0.8rem; color: var(--text-dim); }
-.panel-footer a { 
-    color: var(--accent-gold) !important; 
-    text-decoration: none; 
-    font-weight: 800; 
-}
+.panel-footer p { font-size: 0.8rem; color: var(--text-dim); margin: 0; }
+.panel-footer a { color: var(--accent-gold); font-weight: 700; text-decoration: none; }
 
-.panel-footer a:hover {
-    text-decoration: underline;
-}
-
-/* Responsividad */
-@media (max-width: 950px) {
-    .main-wrapper { padding-top: 80px; }
-    .auth-panel-wide { padding: 2.5rem 2rem; }
-    .form-grid-extra-wide { grid-template-columns: 1fr 1fr; }
-    .full-width { grid-column: span 2; }
-}
-
-@media (max-width: 650px) {
-    .form-grid-extra-wide { grid-template-columns: 1fr; }
-    .full-width { grid-column: span 1; }
-    .main-logo-white { font-size: 3rem; }
+/* Control responsivo solo para pantallas muy chicas */
+@media (max-width: 1100px) {
+    .grid-ultra-horizontal { grid-template-columns: repeat(2, 1fr); }
+    .form-footer-horizontal { flex-direction: column; align-items: stretch; gap: 1rem; }
+    .action-btn-horizontal { height: auto; padding: 14px; }
 }
