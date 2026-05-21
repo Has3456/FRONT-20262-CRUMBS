@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/login.css'; 
 
-// Importación de componentes reutilizables según tu arquitectura
+// Importación de componentes reutilizables
 import Input from '../components/input';
 import Button from '../components/buttom'; 
 
@@ -13,55 +13,48 @@ export default function Login() {
   
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // 1. CREDENCIALES DEL ADMINISTRADOR (Dato Quemado)
-    const ADMIN_DATA = {
-      nombre: 'Administrador Maestro',
-      email: 'admin@crumbs.com',
-      password: 'admin123',
-      rol: 'admin'
-    };
+    try {
+      // 1. Obtenemos todos los usuarios desde el backend
+      const response = await fetch('http://localhost:8080/api/crumbs/usuarios');
+      const usuarios = await response.json();
 
-    // 2. LÓGICA DE AUTENTICACIÓN
-    let usuarioValido = null;
+      // 2. Buscamos el usuario en la lista (filtrando por email y contraseña)
+      const usuarioEncontrado = usuarios.find(u => 
+        u.email === email && u.contraseña === password
+      );
 
-    // Verificar primero si es el Admin
-    if (email === ADMIN_DATA.email && password === ADMIN_DATA.password) {
-      usuarioValido = ADMIN_DATA;
-    } else {
-      // Si no es admin, buscar en usuarios registrados (LocalStorage)
-      const usuarios = JSON.parse(localStorage.getItem('crumbs_users')) || [];
-      const encontrado = usuarios.find(u => u.email === email && u.password === password);
-      if (encontrado) {
-        usuarioValido = { ...encontrado, rol: 'usuario' }; // Asignar rol de usuario
+    if (usuarioEncontrado) {
+        // 1. Guardamos la sesión (mejor orden)
+        localStorage.setItem('user_session', JSON.stringify({
+          nombre: usuarioEncontrado.nombres,
+          email: usuarioEncontrado.email,
+          rol: 'usuario',
+          loginTime: new Date()
+        }));
+
+        // 2. Guardamos el ID específicamente
+        localStorage.setItem('usuarioId', usuarioEncontrado.id);
+
+        // 3. Finalmente navegamos
+        alert(`Bienvenido de nuevo, ${usuarioEncontrado.nombres}.`);
+        navigate('/dashboard');
+        
+      } 
+      
+      else {
+        alert("Acceso denegado. Las credenciales no existen en el hormiguero.");
       }
-    }
 
-    if (usuarioValido) {
-      // Registro de sesión con el nuevo campo de ROL
-      localStorage.setItem('user_session', JSON.stringify({
-        nombre: usuarioValido.nombre,
-        email: usuarioValido.email,
-        rol: usuarioValido.rol, // Guardamos el rol para el Dashboard
-        loginTime: new Date()
-      }));
-
-      // Redirección al Dashboard tras éxito con tu delay original
-      setTimeout(() => {
-        setLoading(false);
-        if (usuarioValido.rol === 'admin') {
-          alert("Acceso total concedido. Bienvenido, Admin.");
-        } else {
-          alert(`Identidad confirmada. Bienvenido, ${usuarioValido.nombre}.`);
-        }
-        navigate('/dashboard'); 
-      }, 1000);
-    } else {
+      
+    } catch (error) {
+      console.error("Error al conectar:", error);
+      alert("No se pudo conectar con el servidor.");
+    } finally {
       setLoading(false);
-      alert("Acceso denegado. Las credenciales no coinciden con nuestros registros.");
     }
   };
 
@@ -75,14 +68,13 @@ export default function Login() {
         <span>PÁGINA PRINCIPAL</span>
       </button>
 
-      {/* Capas decorativas de fondo (Glows) */}
+      {/* Capas decorativas de fondo */}
       <div className="background-overlay">
         <div className="glow-circle glow-1"></div>
         <div className="glow-circle glow-2"></div>
       </div>
 
       <div className="main-wrapper">
-        {/* Sección de Marca y Slogan */}
         <header className="brand-hero">
           <h1 className="main-logo">Crumb's</h1>
           <div className="slogan-container">
@@ -93,7 +85,6 @@ export default function Login() {
         </header>
 
         <div className="content-layout">
-          {/* Formulario de Autenticación */}
           <section className="auth-panel">
             <div className="panel-accent-top"></div> 
             
@@ -131,7 +122,6 @@ export default function Login() {
 
               <Button text={loading ? "ACCEDIENDO..." : "DESBLOQUEAR"} />
 
-              {/* Sección de Registro de cuenta */}
               <div className="auth-footer">
                 <p>¿No posees una credencial de acceso?</p>
                 <button 
@@ -145,8 +135,7 @@ export default function Login() {
             </form>
           </section>
 
-          {/* Enjambre de iconos decorativos (Crumb Items) */}
-          <aside className="swarm-collage">
+        <aside className="swarm-collage">
             <div className="enjambre-container">
               <div className="crumb-item item-1">
                 <svg className="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">

@@ -7,20 +7,25 @@ import Login from './pages/login';
 import Registro from './pages/registro';
 import { Dashboard } from './pages/Dashboard'; 
 import { Historial } from './pages/Historial'; 
-import { CrearGasto } from './pages/CrearGasto'; // Importación del nuevo componente
+import { CrearGasto } from './pages/CrearGasto';
 import { Metas } from './pages/metas';
 import { Perfil } from './pages/perfil';
+
+// Nuevas Importaciones (Asegúrate de tener estos archivos en src/pages/)
+import { CrearCategoria } from './pages/CrearCategoria';
+import { RegistrarMedioPago } from './pages/RegistrarMedioPago';
+import { RegistrarComercio } from './pages/RegistrarComercio';
+
 
 
 // Importación de Estilos Globales
 import './App.css';
 
-
 function App() {
   return (
     <Router>
       <Routes>
-        {/* 1. Página de aterrizaje (Landing Page) */}
+        {/* 1. Página de aterrizaje */}
         <Route path="/" element={<Home />} />
         
         {/* 2. Autenticación */}
@@ -29,26 +34,23 @@ function App() {
         
         {/* 3. Panel de Control Principal */}
         <Route path="/dashboard" element={<Dashboard />} />
-
-        {/* 3.5. Crear Gasto - Módulo de Análisis */}
+       
+        {/* 4. Operaciones */}
         <Route path="/crear-gasto" element={<CrearGasto />} />
+        <Route path="/crear-categoria" element={<CrearCategoria />} />
+        <Route path="/registrar-medio-pago" element={<RegistrarMedioPago />} />
+        <Route path="/registrar-comercio" element={<RegistrarComercio />} />
 
-        {/* 4. Vista de Historial Detallado */}
+        {/* 5. Vistas de Gestión */}
         <Route path="/historial" element={<Historial />} />
-
-        {/* 5. Vista de Metas */}
         <Route path="/metas" element={<Metas />} />
-
-
-        {/* 7. Vista de Perfil */}
         <Route path="/perfil" element={<Perfil />} />
 
-
-        {/* Opcional: Ruta para manejar errores 404 */}
+        {/* Opcional: Ruta 404 */}
         <Route path="*" element={
-          <div style={{ color: 'white', textAlign: 'center', marginTop: '50px' }}>
+          <div style={{ color: '#1a1c20', textAlign: 'center', marginTop: '50px' }}>
             <h1>404 - Ruta no encontrada</h1>
-            <a href="/" style={{ color: '#ffd700' }}>Volver al inicio</a>
+            <a href="/" style={{ color: '#d4af37' }}>Volver al inicio</a>
           </div>
         } />
       </Routes>
