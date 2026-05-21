@@ -56,6 +56,20 @@ export const Sidebar = ({ activeSection, setActiveSection }) => {
         >
           <span className="nav-dot"></span> Metas de Ahorro
         </button>
+
+
+        <button className="menu-item" onClick={() => navigate('/registrar-medio-pago')}>
+         <span className="nav-dot"></span> Registrar Medio Pago
+        </button>
+
+          <button className="menu-item" onClick={() => navigate('/registrar-comercio')}>
+          <span className="nav-dot"></span> Registrar Comercio
+        </button>
+
+
+          <button className="menu-item" onClick={() => navigate('/crear-categoria')}> 
+          <span className="nav-dot"></span> Crear Categoría
+        </button>
         
         <p className="menu-label">SISTEMA</p>
         <button className="menu-item" onClick={() => navigate('/perfil')}>
@@ -66,6 +80,12 @@ export const Sidebar = ({ activeSection, setActiveSection }) => {
         <button className="menu-item logout-btn" onClick={handleLogout}>
           <span className="nav-dot-exit"></span> Cerrar Sesión
         </button>
+
+        
+
+      
+
+
       </nav>
     </aside>
   );

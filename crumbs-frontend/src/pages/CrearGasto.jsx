@@ -2,191 +2,458 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/gasto.css';
 
+
 export const CrearGasto = () => {
   const navigate = useNavigate();
 
-  // --- ESTADOS DEL FORMULARIO ---
-  const [nombre, setNombre] = useState('');
+  // --- ESTADOS PRINCIPALES ---
+  const [descripcion, setDescripcion] = useState('');
+  const [fecha, setFecha] = useState('');
+  const [valor, setValor] = useState('');
   const [presupuestoAntes, setPresupuestoAntes] = useState('');
-  const [monto, setMonto] = useState('');
-  const [categoria, setCategoria] = useState('');
-  const [especificar, setEspecificar] = useState('');
-  
+  const [imagen, setImagen] = useState('');
+  const [tipoNecesidad, setTipoNecesidad] = useState('');
+  const [frecuenciaGasto, setFrecuenciaGasto] = useState('');
+  const [lugarConsumo, setLugarConsumo] = useState('');
+  const [medioVerificacion, setMedioVerificacion] = useState('');
+  const [gradoNecesidad, setGradoNecesidad] = useState('');
+
   // --- ESTADOS DE ANÁLISIS ---
   const [saldoRestante, setSaldoRestante] = useState(0);
-  const [riesgo, setRiesgo] = useState('Bajo'); // 'Bajo', 'Medio', 'Alto'
+  const [riesgo, setRiesgo] = useState('Bajo');
 
-  // --- LÓGICA DE CÁLCULO EN TIEMPO REAL ---
-  useEffect(() => {
-    const p = parseFloat(presupuestoAntes) || 0;
-    const m = parseFloat(monto) || 0;
-    const restante = p - m;
-    setSaldoRestante(restante);
+  // --- RELACIONES Y LISTAS ---
+  const [categoriaId, setCategoriaId] = useState('');
+  const [medioPagoId, setMedioPagoId] = useState('');
+  const [comercioId, setComercioId] = useState('');
+  
+  const [listaMediosPago, setListaMediosPago] = useState([]);
+  const [listaCategorias, setListaCategorias] = useState([]);
+  const [listaComercios, setListaComercios] = useState([]);
+  
 
-    if (p > 0 && m > 0) {
-      const porcentajeGasto = (m / p) * 100;
-      if (porcentajeGasto >= 50) setRiesgo('Alto');
-      else if (porcentajeGasto >= 20) setRiesgo('Medio');
-      else setRiesgo('Bajo');
-    } else {
-      setRiesgo('Bajo');
+useEffect(() => {
+  const cargarDatos = async () => {
+    const usuarioId = localStorage.getItem('usuarioId');
+    if (!usuarioId) return;
+
+    // 1. Cargar Medios de Pago
+    try {
+      const resMedios = await fetch(`http://localhost:8080/api/crumbs/medios_pago/usuario/${usuarioId}`);
+      if (resMedios.ok) {
+        const medios = await resMedios.json();
+        setListaMediosPago(Array.isArray(medios) ? medios : []);
+      }
+    } catch (error) {
+      console.error("Error al cargar medios de pago:", error);
     }
-  }, [presupuestoAntes, monto]);
 
-  // --- PROCESAR EL REGISTRO (SUBMIT) ---
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    // 2. Cargar Categorías
+    try {
+      const resCat = await fetch(`http://localhost:8080/api/crumbs/categorias/usuario/${usuarioId}`);
+      if (resCat.ok) {
+        const categorias = await resCat.json();
+        setListaCategorias(Array.isArray(categorias) ? categorias : []);
+      }
+    } catch (error) {
+      console.error("Categorías no disponibles:", error);
+    }
 
-    // Estructura de la "Migaja" adaptada del JS original
-    const nuevaMigaja = {
-      id: Date.now(),
-      nombre: nombre,
-      monto: parseFloat(monto),
-      presupuestoOriginal: parseFloat(presupuestoAntes),
-      saldoDespues: saldoRestante,
-      categoria: categoria === 'Otros' ? especificar : (categoria || "No especificado"),
-      riesgo: riesgo,
-      fecha: new Date().toLocaleString(),
-      // Lógica de coordenadas para el Radar de Riesgo
-      x: Math.floor(Math.random() * 70) + 15,
-      y: Math.floor(Math.random() * 70) + 15
-    };
-
-    // Persistencia en LocalStorage (crumbs_db)
-    const db = JSON.parse(localStorage.getItem('crumbs_db')) || [];
-    db.push(nuevaMigaja);
-    localStorage.setItem('crumbs_db', JSON.stringify(db));
-
-    // Feedback visual y redirección
-    const btn = e.target.querySelector('.btn-submit');
-    btn.innerText = "SISTEMA ACTUALIZADO";
-    btn.style.background = "#28a745";
-
-    setTimeout(() => {
-      navigate('/dashboard'); // O la ruta que prefieras para volver
-    }, 1200);
+    // 3. Cargar Comercios
+    try {
+      const resComercios = await fetch(`http://localhost:8080/api/crumbs/comercios/usuario/${usuarioId}`);
+      if (resComercios.ok) {
+        const comercios = await resComercios.json();
+        setListaComercios(Array.isArray(comercios) ? comercios : []);
+      }
+    } catch (error) {
+      console.error("Error al cargar comercios:", error);
+    }
   };
 
+  cargarDatos();
+}, []);
+
+  // --- LÓGICA DE CÁLCULO AUTOMÁTICO ---
+useEffect(() => {
+  const p = parseFloat(presupuestoAntes) || 0;
+  const v = parseFloat(valor) || 0;
+  const nuevoSaldo = p - v;
+  
+  setSaldoRestante(nuevoSaldo);
+
+  if (nuevoSaldo < 0) {
+      setRiesgo('Alto (Deuda)');
+  } else if (nuevoSaldo < (p * 0.1)) {
+      setRiesgo('Medio');
+  } else {
+      setRiesgo('Bajo');
+  }
+}, [presupuestoAntes, valor]);
+
+  // ... (Tu useEffect de cálculo de riesgo se queda igual) ...
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  const usuarioId = localStorage.getItem('usuarioId');
+
+  // 1. Validación de seguridad: no enviar si no hay sesión
+  if (!usuarioId) {
+    alert("Error: Sesión no encontrada. Por favor, inicia sesión.");
+    navigate('/login');
+    return;
+  }
+
+  // 2. Construcción del objeto Gasto
+  // Aseguramos que las relaciones sean objetos con ID, como Spring espera
+  const gasto = {
+    descripcion,
+    fecha,
+    valor: parseFloat(valor) || 0,
+    imagen,
+    tipoNecesidad,
+    frecuenciaGasto,
+    lugarConsumo,
+    medioVerificacion,
+    gradoNecesidad: gradoNecesidad.toString(),
+    
+    usuario: { id: parseInt(usuarioId) },
+    categoria: categoriaId ? { id: parseInt(categoriaId) } : null,
+    medioPago: medioPagoId ? { id: parseInt(medioPagoId) } : null,
+    comercio: comercioId ? { id: parseInt(comercioId) } : null
+  };
+
+  // 3. Envío al backend
+  try {
+    const response = await fetch(`http://localhost:8080/api/crumbs/gastos/usuario/${usuarioId}`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json' 
+      },
+      body: JSON.stringify(gasto)
+    });
+
+    if (!response.ok) {
+      // Si el servidor responde con 404 o 500, capturamos el mensaje
+      const errorText = await response.text();
+      throw new Error(errorText || "Error al registrar el gasto. Revisa los datos.");
+    }
+
+    alert('¡Gasto registrado con éxito!');
+    navigate('/dashboard'); 
+    
+  } catch (error) {
+    console.error("Error en el registro:", error);
+    alert('No se pudo guardar: ' + error.message);
+  }
+};
+
+
   return (
+
     <div className="form-viewport">
+
       <header className="form-header">
+
         <div className="header-info">
           <span className="pulse-dot"></span>
-          <p>MÓDULO DE ANÁLISIS FINANCIERO TRANSVERSAL</p>
+          <p>MÓDULO DE ANÁLISIS FINANCIERO</p>
         </div>
-        <button className="btn-panel" onClick={() => navigate('/dashboard')}>
+
+        <button
+          className="btn-panel"
+          onClick={() => navigate('/dashboard')}
+        >
           VOLVER AL PANEL
         </button>
+
       </header>
 
       <main className="horizontal-container">
-        <form id="form-gasto" className="horizontal-form" onSubmit={handleSubmit}>
-          
-          {/* SECCIÓN 01: IDENTIFICACIÓN */}
+
+        <form className="horizontal-form" onSubmit={handleSubmit}>
+
+          {/* ================================= */}
+          {/* INFORMACIÓN GENERAL */}
+          {/* ================================= */}
+
           <div className="form-section">
-            <div className="section-tag">01. IDENTIFICACIÓN</div>
-            <div className="input-group">
-              <label>ESTABLECIMIENTO</label>
-              <input 
-                type="text" 
-                placeholder="Ej: Starbucks" 
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                required 
-              />
+
+            <div className="section-tag">
+              01. INFORMACIÓN GENERAL
             </div>
-            <div className="input-group">
-              <label>PRESUPUESTO DISPONIBLE</label>
-              <input 
-                type="number" 
-                placeholder="Efectivo actual" 
-                value={presupuestoAntes}
-                onChange={(e) => setPresupuestoAntes(e.target.value)}
-                required 
+
+           <div className="input-group">
+
+              <label>LUGAR DE CONSUMO</label>
+
+              <input
+                type="text"
+                placeholder="Ej: Supermercado"
+                value={lugarConsumo}
+                onChange={(e) => setLugarConsumo(e.target.value)}
+                required
               />
+
             </div>
+
+
+            <div className="input-group">
+
+              <label>DESCRIPCIÓN</label>
+
+              <input
+                type="text"
+                placeholder="Ej: Compra de café"
+                value={descripcion}
+                onChange={(e) => setDescripcion(e.target.value)}
+                required
+              />
+
+            </div>
+
+            <div className="input-group">
+
+              <label>FECHA</label>
+
+              <input
+                type="date"
+                value={fecha}
+                onChange={(e) => setFecha(e.target.value)}
+                required
+              />
+
+            </div>
+
+            <div className="input-group">
+
+              <label>PRESUPUESTO ACTUAL</label>
+
+           <input
+              type="number"
+              placeholder="Dinero disponible"
+              value={presupuestoAntes} // <--- Verifica que sea exactamente este nombre
+              onChange={(e) => setPresupuestoAntes(e.target.value)}/>
+
+            </div>
+
+            <div className="input-group">
+
+              <label>VALOR DEL GASTO</label>
+
+              <input
+                type="number"
+                placeholder="0"
+                value={valor}
+                onChange={(e) => setValor(e.target.value)}
+                required
+              />
+
+            </div>
+
+        
+            <div className="input-group">
+
+              <label>IMAGEN (URL)</label>
+
+              <input
+                type="text"
+                placeholder="https://..."
+                value={imagen}
+                onChange={(e) => setImagen(e.target.value)}
+              />
+
+            </div>
+
           </div>
 
-          {/* SECCIÓN 02: CLASIFICACIÓN */}
+          {/* ================================= */}
+          {/* CLASIFICACIÓN */}
+          {/* ================================= */}
+
           <div className="form-section">
-            <div className="section-tag">02. CLASIFICACIÓN</div>
-            <div className="input-group">
-              <label>MONTO DEL GASTO (COP)</label>
-              <input 
-                type="number" 
-                placeholder="0.00" 
-                value={monto}
-                onChange={(e) => setMonto(e.target.value)}
-                required 
-              />
+
+            <div className="section-tag">
+              02. CLASIFICACIÓN
             </div>
+
             <div className="input-group">
-              <label>CATEGORÍA</label>
-              <select 
-                value={categoria} 
-                onChange={(e) => setCategoria(e.target.value)} 
+
+              <label>TIPO DE NECESIDAD</label>
+
+              <select
+                value={tipoNecesidad}
+                onChange={(e) => setTipoNecesidad(e.target.value)}
                 required
               >
-                <option value="">Seleccione...</option>
-                <option value="Snacks">Snacks & Café</option>
-                <option value="Transporte">Transporte / Apps</option>
-                <option value="Suscripciones">Suscripciones</option>
-                <option value="Hobby">Hobby / Ocio</option>
-                <option value="Otros">Otros (Especificar)</option>
+
+                <option value="">Seleccione</option>
+                <option value="Necesario">Necesario</option>
+                <option value="Deseo">Deseo</option>
+                <option value="Impulso">Impulso</option>
+
               </select>
+
             </div>
-            
-            {categoria === 'Otros' && (
-              <div className="input-group" id="container-especificar">
-                <label>DETALLE DE CATEGORÍA</label>
-                <input 
-                  type="text" 
-                  placeholder="¿Cuál?" 
-                  value={especificar}
-                  onChange={(e) => setEspecificar(e.target.value)}
-                  required
-                />
-              </div>
-            )}
+
+            <div className="input-group">
+
+              <label>FRECUENCIA DEL GASTO</label>
+
+              <select
+                value={frecuenciaGasto}
+                onChange={(e) => setFrecuenciaGasto(e.target.value)}
+                required
+              >
+
+                <option value="">Seleccione</option>
+                <option value="Diario">Diario</option>
+                <option value="Semanal">Semanal</option>
+                <option value="Mensual">Mensual</option>
+                <option value="Esporádico">Esporádico</option>
+
+              </select>
+
+            </div>
+
+           <div className="input-group">
+            <label>CATEGORÍA</label>
+            <select 
+              value={categoriaId} 
+              onChange={(e) => setCategoriaId(e.target.value)} 
+              required
+            >
+              <option value="">Seleccione categoría</option>
+              {listaCategorias.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.nombre}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* SECCIÓN 03: IMPACTO TÁCTICO */}
-          <div className="form-section">
-            <div className="section-tag">03. IMPACTO TÁCTICO</div>
-            <div className="input-group">
-              <label>SALDO TRAS OPERACIÓN</label>
-              <input 
-                type="text" 
-                className="readonly-input" 
-                style={{ color: saldoRestante < 0 ? "#ff453a" : "#d4af37" }}
-                readOnly 
-                value={saldoRestante < 0 ? `DEUDA: $${Math.abs(saldoRestante).toLocaleString()}` : `$${saldoRestante.toLocaleString()}`} 
-              />
-            </div>
-            
-            <div className="input-group">
-              <label>AMENAZA DETECTADA</label>
-              <div className="risk-display">
-                <div 
-                  className={`risk-light l-bajo ${riesgo === 'Bajo' ? 'active' : ''}`}
-                  style={{ opacity: riesgo === 'Bajo' ? 1 : 0.2, boxShadow: riesgo === 'Bajo' ? "0 0 15px rgba(10, 132, 255, 0.4)" : "none" }}
-                >B</div>
-                <div 
-                  className={`risk-light l-medio ${riesgo === 'Medio' ? 'active' : ''}`}
-                  style={{ opacity: riesgo === 'Medio' ? 1 : 0.2, boxShadow: riesgo === 'Medio' ? "0 0 15px rgba(212, 175, 55, 0.4)" : "none" }}
-                >M</div>
-                <div 
-                  className={`risk-light l-alto ${riesgo === 'Alto' ? 'active' : ''}`}
-                  style={{ opacity: riesgo === 'Alto' ? 1 : 0.2, boxShadow: riesgo === 'Alto' ? "0 0 15px rgba(255, 69, 58, 0.4)" : "none" }}
-                >A</div>
-              </div>
+           <div className="input-group">
+              <label>MEDIO DE PAGO</label>
+             <select
+              value={medioPagoId}
+              onChange={(e) => setMedioPagoId(e.target.value)}
+              required
+            >
+              <option value="">Seleccione</option>
+             {listaMediosPago?.map((medio) => (
+              <option key={medio.id} value={medio.id}>
+                {medio?.nombre ?? 'Sin nombre'}
+              </option>
+            ))}
+            </select>
             </div>
 
-            <button type="submit" className="btn-submit">PROCESAR MIGAJA</button>
+         <div className="input-group">
+          <label>COMERCIO</label>
+          <select 
+            value={comercioId} 
+            onChange={(e) => setComercioId(e.target.value)} 
+            required
+          >
+            <option value="">Seleccione</option>
+            {Array.isArray(listaComercios) && listaComercios.map((comercio) => (
+              <option key={comercio.id} value={comercio.id}>
+                {comercio.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
+            <div className="input-group">
+
+              <label>MEDIO DE VERIFICACIÓN</label>
+
+              <select
+                value={medioVerificacion}
+                onChange={(e) => setMedioVerificacion(e.target.value)}
+                required
+              >
+
+                <option value="">Seleccione</option>
+                <option value="Factura">Factura</option>
+                <option value="Recibo">Recibo</option>
+                <option value="Ninguno">Ninguno</option>
+
+              </select>
+
+            </div>
+
+            <div className="input-group">
+
+              <label>GRADO DE NECESIDAD (1-5)</label>
+
+              <input
+                type="number"
+                min="1"
+                max="5"
+                value={gradoNecesidad}
+                onChange={(e) => setGradoNecesidad(e.target.value)}
+                required
+              />
+
+            </div>
+
+          </div>
+
+          {/* ================================= */}
+          {/* ANÁLISIS */}
+          {/* ================================= */}
+
+          <div className="form-section">
+
+            <div className="section-tag">
+              03. IMPACTO FINANCIERO
+            </div>
+
+       
+
+            <div className="input-group">
+
+              <label>SALDO RESTANTE</label>
+
+              <input
+                type="text"
+                readOnly
+                className="readonly-input"
+                value={
+                  saldoRestante < 0
+                    ? `DEUDA: $${Math.abs(saldoRestante).toLocaleString()}`
+                    : `$${saldoRestante.toLocaleString()}`
+                }
+                style={{
+                  color: saldoRestante < 0 ? '#ff453a' : '#d4af37'
+                }}
+              />
+
+            </div>
+
+            <div className="input-group">
+
+              <label>NIVEL DE RIESGO</label>
+
+              <input
+                type="text"
+                readOnly
+                className="readonly-input"
+                value={riesgo}
+              />
+
+            </div>
+
+            <button type="submit" className="btn-submit">
+              REGISTRAR GASTO
+            </button>
+
           </div>
 
         </form>
       </main>
     </div>
   );
-};
+}

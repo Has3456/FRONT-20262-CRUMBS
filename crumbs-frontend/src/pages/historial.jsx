@@ -12,10 +12,8 @@ export const Historial = () => {
   const [busqueda, setBusqueda] = useState('');
   const [filtroRiesgo, setFiltroRiesgo] = useState('ALL');
 
-  // 3. Cargar historial al montar el componente (Equivalente a loadHistory)
-  useEffect(() => {
-    cargarDesdeStorage();
-  }, []);
+q
+
 
   const cargarDesdeStorage = () => {
     const db = JSON.parse(localStorage.getItem('crumbs_db')) || [];
